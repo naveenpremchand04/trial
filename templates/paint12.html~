@@ -1,0 +1,14 @@
+<html>
+<head>
+<style type="text/css">
+h1 {
+	  color:orange;
+	  text-align:center;
+	  font-family:"Times New Roman";
+		  text-shadow: 5px 5px 3px #000000;
+		}
+</style>
+<body background='http://us.123rf.com/400wm/400/400/mariusz_prusaczyk/mariusz_prusaczyk1205/mariusz_prusaczyk120500296/13700791-3d-error-404-sorry-crossword-on-white-background.jpg'>
+<h1><i>Wrong filename!Please specify correct filename</i></h1>
+</body>
+</head>

@@ -1,0 +1,351 @@
+
+
+<html>
+<head>
+<style type="text/css">
+h1 {
+	  color:orange;
+	  text-align:center;
+	  font-family:"Times New Roman";
+		  text-shadow: 5px 5px 3px #000000;
+		}
+
+	h4 { color:red;
+		 font-family:"Times New Roman";
+		text-shadow: 5px 5px 3px #000000;
+		 }
+#mycanvas{
+	  position:absolute;
+	  left:400px;
+	  top:100px;
+	  border: solid;
+	  cursor:crosshair;
+	}
+
+
+</style>
+
+<center>
+<h1> <blink> PAINT APP </blink></h1>
+</center>
+<canvas id="mycanvas" width=500 height=500 style="background-color:white;border: 5px solid  #666666"></canvas><br>
+
+<h4> <i>Select Tool</i> 	 </h4>	
+<select id="Tool" >
+<option value="" onclick="alarm();">select</option>
+<option value="box" onclick="rect();">Rectangle</option>
+<option value="circle" onclick="circle();">circle</option>
+<option value="line" onclick="line();">line</option>
+
+</select>
+<p><p>
+
+<table>
+		   
+		    <td><input type="button" id="color" title="Black" onclick="setcolor('#000000')" style=" width:40px;height:40px;background-color:#000000" /></td>
+			 <td><input type="button" id="color" title="Brown" onclick="setcolor('#A52A2A')" style="width:40px;height:40px;background-color:#A52A2A" /></td>
+			 <td><input type="button" id="color" title="Dark Red" onclick="setcolor('#8B0000')" style="width:40px;height:40px;background-color:#8B0000" /></td>
+<tr>
+			 <td><input type="button" id="color" title="Red" onclick="setcolor('#FF0000')" style="width:40px;height:40px;background-color:#FF0000" /></td>
+			 <td><input type="button" id="color" title="Deep Pink" onclick="setcolor('#FF1493')" style="width:40px;height:40px;background-color:#FF1493" /></td>
+			 <td><input type="button" id="color" title="Green" onclick="setcolor('#008000')" style="width:40px;height:40px;background-color:#008000" /></td></tr>
+			<tr> <td><input type="button" id="color" title="Lime" onclick="setcolor('#00FF00')" style="width:40px;height:40px;background-color:#00FF00" /></td>
+			 <td><input type="button" id="color" title="Orange" onclick="setcolor('#FFA500')" style="width:40px;height:40px;background-color:#FFA500" /></td>
+			 <td><input type="button" id="color" title="Yellow" onclick="setcolor('#FFFF00')" style="width:40px;height:40px;background-color:#FFFF00" /></td></tr>
+			 <td><input type="button" id="color" title="Blue" onclick="setcolor('#0000FF')" style="width:40px;height:40px;background-color:#0000FF" /></td>
+			 <td><input type="button" id="color" title="Aqua" onclick="setcolor('#00FFFF')" style="width:40px;height:40px;background-color:#00FFFF" /></td>
+			 <td><input type="button" id="color" title="Sky Blue" onclick="setcolor('#87CEEB')" style="width:40px;height:40px;background-color:#87CEEB" /></td>
+			 
+		   </tr>
+		   
+ </table></p></p>
+<p><p>
+
+<input type="button" value="CLEAR" onclick="clear1();">
+<a href="/"><b><input type="button" value="New"</b></a></p></p>
+<p>
+<h4><i>Image Name</i> </h4></p><p>
+<form >
+<input type="text" id="tex"><p>
+<input type="button" value="SAVE" onclick="save();"><p>
+
+</form>
+<p><h4><i>Image Store </i></h4></p>
+
+<p>
+<form name="fnames" action="html" method="post">
+<div><input type="text" name="fnames"  ></div>
+<p><input type="submit" value="show"/> </p>
+</form>
+
+
+</p>
+
+
+</head>
+
+<body background="http://4.bp.blogspot.com/-KwLklpPAZxc/Tcl0-_ypJ3I/AAAAAAAAAKk/Rtb-6wjAGkA/s1600/eco-green-background-with-leaf.jpg">
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script type="text/javascript">
+	wholedata=new Array()
+	data= new Array()
+	fill=1
+	imagedata='{{imagedata|safe}}'
+	imagedata=JSON.parse(imagedata)
+ 	mycanvas=document.getElementById("mycanvas")
+ 	c=mycanvas.getContext("2d")
+ 	c.fillStyle="white"
+ 	c.fillRect(0,0,985,285)
+ 	if (imagedata==[]){
+ 		wholedata=[]
+ 	}else{
+ 		wholedata=imagedata
+ 		draw()
+ 	}
+	wholedata=[]
+ 	color2="black"
+ 	eraserthick=10
+
+ 	filename=[]
+	lis='{{lis|tojson|safe}}'
+	name=""
+        len = 0
+	lis=JSON.parse(lis)	
+        for(p in lis){
+        len++}
+        for(i in lis){
+	name+='<a href='+lis[i]+' onclick="draw();" id="link">'+lis[i]+'</a><br>'
+                		
+                document.getElementById("element").innerHTML=name}
+        
+ 	
+ 	function erthick(){
+  		eraserthick=document.getElementById("eraser").value;
+ 	}
+ 	function setcolor(color1){
+  		color2=color1
+  		c.strokeStyle=color1
+  		c.fillStyle=color1  
+ 	}
+ 	
+
+
+
+ 	c1=mycanvas.getContext("2d")
+ 	document.onselectstart = function(){ return false; }
+
+
+ 	function line(){
+ 		setcolor(color2)
+  		document.documentElement.style.cursor ='url(http://cur.cursors-4u.net/cursors/cur-11/cur1055.ani),auto'
+  		var flag=0
+  		var flag1=0
+  		var rect = mycanvas.getBoundingClientRect()
+  		mycanvas.onmouseup=secondpoint
+  		mycanvas.onmousedown=firstpoint
+  		mycanvas.onmousemove=movepoint
+  		function firstpoint(e1){
+   			im=c.getImageData(0,0,mycanvas.width,mycanvas.height)
+   			rect = mycanvas.getBoundingClientRect()
+   			x1=e1.clientX-rect.left
+   			y1=e1.clientY-rect.top
+   			flag1=1 
+   			flag=0
+  		}
+  
+  		function secondpoint(){
+   			flag=1
+			var s={"Type":"line", "startpointx":x1,"startpointy":y1,"endpointx":c3,"endpointy":c4,"color":color2}
+			wholedata.push(s)	
+  		}
+  		function movepoint(e1){
+   			if(flag==0&&flag1==1){
+    				rect = mycanvas.getBoundingClientRect()
+    				c.putImageData(im,0,0)
+    				c.beginPath()
+    				c.moveTo(x1,y1)
+    				c3=e1.clientX-rect.left
+    				c4=e1.clientY-rect.top
+    				c.lineTo(c3,c4)
+    				c.stroke()
+    				c.closePath()
+    
+   			}
+  		}
+	
+ 	}
+
+ 	
+	function clear1(){
+  		c.fillStyle="white"
+  		c.fillRect(0,0,1200,500)
+ 	}
+
+ 	function circle(){
+  		setcolor(color2)
+  		document.documentElement.style.cursor ='url(http://cur.cursors-4u.net/cursors/cur-11/cur1055.ani),auto'
+  		var flag=0
+  		var flag1=0
+  		var rect = mycanvas.getBoundingClientRect()
+  		mycanvas.onmouseup=secondpoint3
+  		mycanvas.onmousedown=firstpoint3
+  		mycanvas.onmousemove=movepoint3
+  		function firstpoint3(e2){
+  	 		
+   			rect = mycanvas.getBoundingClientRect()
+   			x4=e2.clientX-rect.left
+   			x=0
+   			y=0
+   			y4=e2.clientY-rect.top
+   			//c.strokeStyle = 'black'
+   			im=c.getImageData(0,0,mycanvas.width,mycanvas.height)
+   			flag1=1 
+   			flag=0
+  		}
+  
+  		function secondpoint3(e2){
+   			//c.clearRect(0,0,500,500)
+   			flag=1
+   			var s={"Type":"circle", "startpointx":x4,"startpointy":y4,"radius":radius,"fill":fill,"color":color2}
+			wholedata.push(s)
+   			
+  		}
+
+  		function movepoint3(e2){
+   			if(flag1==1&&flag==0){
+    				c.putImageData(im,0,0)
+    				c.beginPath()
+    				//c.movePath(x4,y4)
+   				rect = mycanvas.getBoundingClientRect()
+   				x2=e2.clientX-rect.left
+   				y2=e2.clientY-rect.top
+    				x=x2-x4
+    				y=y2-y4
+    				a=Math.pow(x,2)
+    				b=Math.pow(y,2)
+				radius=Math.sqrt(a+b)
+    				c.arc(x4,y4,radius,0,2*Math.PI,true)
+    				if(fill==1){
+     					c.fill()
+    				}
+    				c.stroke() 
+   			}
+  		}
+
+ 	}
+	
+function alarm()
+{
+alert('please select the tool');
+}
+
+ 	function rect(){
+  		setcolor(color2)
+  		document.documentElement.style.cursor ='url(cur.cursors-4u.net/cursors/cur-11/cur1055.ani),auto'
+  		var flag=0
+  		var flag1=0
+  		var rect = mycanvas.getBoundingClientRect()
+  		mycanvas.onmouseup=secondpoint4
+  		mycanvas.onmousedown=firstpoint4
+  		mycanvas.onmousemove=movepoint4
+  		function firstpoint4(e2){
+  	 		//c.clearRect(0,0,500,500)
+   			im=c.getImageData(0,0,mycanvas.width,mycanvas.height)
+   			rect1 = mycanvas.getBoundingClientRect()
+   			x4=e2.clientX-rect1.left
+   			y4=e2.clientY-rect1.top
+   			//c.strokeStyle = 'black'
+   
+   			flag1=1 
+   			flag=0
+   			x=0
+   			y=0
+  		}
+  
+  		function secondpoint4(e2){
+  			flag=1
+  			var s={"Type":"Rect", "startpointx":x4,"startpointy":y4,"width":w,"height":h,"fill":fill,"color":color2}
+			wholedata.push(s)
+  		}
+  		function movepoint4(e2){
+   			if(flag==0&&flag1==1){
+    				c.putImageData(im,0,0)
+				w=e2.clientX-rect1.left-x4
+				h=e2.clientY-rect1.top-y4
+    				rect1 = mycanvas.getBoundingClientRect()
+    				c.strokeRect(x4,y4,w,h)
+    				if(fill==1){
+     					c.fillRect(x4,y4,w,h)
+    				}
+   			} 
+  		}
+
+ 	}
+	
+	function save(){
+		filename=document.getElementById("tex").value
+		if(filename!=""){
+			$.post("/h/",{
+				'fnam':filename,
+				'image':JSON.stringify(wholedata)
+    				
+				},
+				function(data,status){document.write(data)
+				});alert('Saved!Memorise Your filename for retrieval ');
+				
+		}else{
+			alert("filename please!")
+		}
+	}
+
+
+	function draw(){
+		for(i in wholedata){
+			
+			//rect = mycanvas.getBoundingClientRect()
+			if(wholedata[i]['Type']=='line'){
+				c.beginPath()
+				x1=wholedata[i]['startpointx']
+				y1=wholedata[i]['startpointy']
+				x2=wholedata[i]['endpointx']
+				y2=wholedata[i]['endpointy']
+				c.moveTo(x1,y1)
+				c.lineTo(x2,y2)
+				c.strokeStyle=wholedata[i]['color']
+				c.stroke()
+				c.closePath()
+			}
+			if(wholedata[i]['Type']=='circle'){
+				c.beginPath()
+				x1=wholedata[i]['startpointx']
+				y1=wholedata[i]['startpointy']
+				c.arc(x1,y1,wholedata[i]['radius'],0,2*Math.PI,true)
+				c.strokeStyle=wholedata[i]['color']
+				c.fillStyle=wholedata[i]['color']
+				if(wholedata[i]['fill']==1){
+					c.fill()
+				}
+				c.stroke()
+				c.closePath()
+			}
+			if(wholedata[i]['Type']=='Rect'){
+				x1=wholedata[i]['startpointx']
+				y1=wholedata[i]['startpointy']
+				width=wholedata[i]['width']
+				height=wholedata[i]['height']
+				c.strokeStyle=wholedata[i]['color']
+				c.fillStyle=wholedata[i]['color']
+				c.strokeRect(x1,y1,width,height)
+				if(wholedata[i]['fill']==1){
+					c.fillRect(x1,y1,width,height)
+				}
+			}
+		}
+	}
+	
+ 
+ 
+</script>
+
+</body>
+</html>
